@@ -1,7 +1,3 @@
-<?php
-session_start();
-?>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -9,12 +5,14 @@ session_start();
         <title>Registration Page</title>
     </head>
     <body>
-        <img src ="ptak.jpg" height="60" width="60"><br>
-
-
+ 
 <?php
+session_start();
 require_once 'connection.php';
 require_once 'User.php';
+require_once 'misc.php';
+
+printHeaderNotLoggedUser('Registration');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['pass'])) {
@@ -30,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // zapytanie na bazie wykonane prawidłowo (bez błędów)
 
                 if ($result->num_rows >0) {
-                    echo '<span style="color:red">Ten email jest juz zajety- sprobuj ponownie!</span>';
+                    echo '<span style="color:red">This email already exists.</span><br><br>';
                 } else {
             
                     $newUser = new User();
@@ -41,8 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     if($newUser->saveToDB($conn)) {
 
-                        echo "Rejestracja przebiegla pomyslnie! <br>Twoje imie to: ". $newUser->getUsername(). ", a twoj email to: ".$newUser->getEmail();
-                        echo '<br>Przejdz do  <a href="PageLogin.php">logowania.</a>';
+                        echo "New user has been registered. <br>Your name is: ". $newUser->getUsername(). ", and your email is: ".$newUser->getEmail();
+                        echo '<br>Go to  <a href="PageLogin.php">Login page</a>';
+                        die();
                     } 
             
                 }
@@ -55,23 +54,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $conn->close();
 $conn = null;
 ?>
-
-
-
-
-
-
-        <h1>Strona rejestracji nowego uzytkownika:</h1>
-        <div>
-            <form method="post">
-                <label>Podaj swoje imie:</label><br>
-                <input name="username" type="text" maxlength="255" value=""/><br>
-                <label>Podaj swoj email:</label><br>
-                <input name="email" type="text" maxlength="255" value=""/><br>
-                <label>Podaj swoje haslo:</label><br>
-                <input name="pass" type="password" maxlength="255" value=""/><br><br>
-                <input type="submit" name="submit" value="Rejestruj"><br><br>
-            </form>
-        </div>
+   
+    <div>
+        <form method="post">
+            <label>Enter user name:</label><br>
+            <input name="username" type="text" maxlength="255" value=""/><br>
+            <label>Enter email:</label><br>
+            <input name="email" type="text" maxlength="255" value=""/><br>
+            <label>Enter password:</label><br>
+            <input name="pass" type="password" maxlength="255" value=""/><br><br>
+            <input type="submit" name="submit" value="Register"><br><br>
+        </form>
+    </div>
     </body>
 </html>

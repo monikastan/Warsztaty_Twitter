@@ -1,54 +1,65 @@
-<?php
-session_start();
-?>
-
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Registration Page</title>
+        <title>Edit User Page</title>
     </head>
     <body>
-        <img src ="ptak.jpg" height="60" width="60"><br>
-
 
 <?php
+session_start();
 require_once 'connection.php';
 require_once 'User.php';
+require_once 'misc.php';
+
+if (isset($_SESSION['userId'])) {
+    $activeUser = User::loadUserById($conn, $_SESSION['userId']);  
+    printHeaderLoggedUser('Edit user page', $activeUser->getUsername());
+} else {
+    printHeaderNotLoggedUser('Edit user page');
+    die('No logged user');
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['pass'])) {
-        if(strlen(trim($_POST['username']))>0 && strlen(trim($_POST['email']))>0 && strlen(trim($_POST['pass']))>0) {
-            $username = trim($_POST['username']);
-            $email = trim($_POST['email']);
-            $pass = trim($_POST['pass']);
-            
-            $query = "SELECT * FROM Users WHERE email = '$email'";
-            $result = $conn->query($query);
-            
-            if ($result == TRUE) {
-                // zapytanie na bazie wykonane prawidłowo (bez błędów)
-
-                if ($result->num_rows >0) {
-                    echo '<span style="color:red">Ten email jest juz zajety- sprobuj ponownie!</span>';
-                } else {
-            
-                    $newUser = new User();
-                    $newUser->setUsername($username);
-                    $newUser->setEmail($email);
-                    $newUser->setPassword($pass);
-
-
-                    if($newUser->saveToDB($conn)) {
-
-                        echo "Rejestracja przebiegla pomyslnie! <br>Twoje imie to: ". $newUser->getUsername(). ", a twoj email to: ".$newUser->getEmail();
-                        echo '<br>Przejdz do  <a href="PageLogin.php">logowania.</a>';
-                    } 
-            
-                }
-                        
+    
+    // sprawdzamy czy zmieniac haslo
+    if (isset($_POST['pass1']) && isset($_POST['pass2'])) {
+        if (strlen(trim($_POST['pass1'])) == 0 && strlen(trim($_POST['pass2']))==0) {
+            $passChange=0; // nie zmieniamy hasla bo puste przyszlo
+        } else {
+            if ((trim($_POST['pass1'])==trim($_POST['pass2']))) {
+                $newPass = trim($_POST['pass1']);
+                $passChange=1; // nowe haslo ok
+            } else {
+                $passChange=-1; // hasla rozne - nic nie updateujemy, nawet username
             }
+                
         }
+    }
+    
+    //sprawdzamy czy zmieniac username (czy przyszedl wypelniony)
+    if (isset($_POST['username']) && strlen(trim($_POST['username']))>0) {
+        $newUserName=trim($_POST['username']);
+    } else {
+        $newUserName='';
+    }
+
+    if ($passChange==0 && $newUserName=='') {
+        echo 'Nothing to change.';
+    } elseif ($passChange != -1) {
+        
+        if ($passChange == 1) {  $activeUser->setPassword($newPass);  }
+        if ($newUserName != '') {  $activeUser->setUserName($newUserName);  }
+
+        if ($activeUser->saveToDB($conn) == true) {
+           echo "Changes were done correctly! <br>Your user data has changed.";
+           die();
+        } else {
+           echo "Problem when updating user data.";
+        }
+    } else {
+        echo 'Your passwords are different! Try again!';
     }
 }
 
@@ -56,22 +67,17 @@ $conn->close();
 $conn = null;
 ?>
 
-
-
-
-
-
-        <h1>Strona rejestracji nowego uzytkownika:</h1>
-        <div>
-            <form method="post">
-                <label>Podaj swoje imie:</label><br>
-                <input name="username" type="text" maxlength="255" value=""/><br>
-                <label>Podaj swoj email:</label><br>
-                <input name="email" type="text" maxlength="255" value=""/><br>
-                <label>Podaj swoje haslo:</label><br>
-                <input name="pass" type="password" maxlength="255" value=""/><br><br>
-                <input type="submit" name="submit" value="Rejestruj"><br><br>
-            </form>
-        </div>
-    </body>
+        <br><br>
+<div>
+    <form method="post">
+        <label>Change your name (empty for no change):</label><br>
+        <input name="username" type="text" maxlength="255" value=""/><br>
+        <label>Change your password (empty for no change):</label><br>
+        <input name="pass1" type="password" maxlength="255" value=""/><br>
+        <label>Confirm your new password:</label><br>
+        <input name="pass2" type="password" maxlength="255" value=""/><br><br>
+        <input type="submit" name="submit" value="Change"><br><br>
+    </form>
+</div>
+</body>
 </html>

@@ -10,8 +10,8 @@ class Tweet {
     private $userId;
     private $text;
     private $creationDate;
-    private $username; //??????Pytanie do Mentora - czy tak może być, bo potrzebny jest Username, ale nie ma go w tabeli
-
+    private $username;
+    
     //Tweet constructor
 
     public function __construct() {

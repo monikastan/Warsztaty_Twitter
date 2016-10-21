@@ -10,9 +10,12 @@ class Messages {
     private $senderUserId;
     private $recipientUserId;
     private $text;
-    private $is_read;
+    private $isRead;
     private $creationDate;
-    
+    private $senderUserName;
+    private $recipientUserName;
+
+
     //Messages constructor
 
     public function __construct() {
@@ -21,7 +24,7 @@ class Messages {
         $this->senderUserId = "";
         $this->recipientUserId = "";
         $this->text = "";
-        $this->is_read = 0;
+        $this->isRead = 0;
         $this->creationDate = "";
     }
     /* 
@@ -39,8 +42,8 @@ class Messages {
         $this->text = $newText;
     }
     
-    public function setIs_Read($newIsRead) {
-        $this->is_read = $newIsRead;
+    public function setIsRead($newIsRead) {
+        $this->isRead = $newIsRead;
     }
 
     public function setCreationDate($newDate) {
@@ -63,22 +66,31 @@ class Messages {
         return $this->text;
     }
     
-    public function getIs_Read() {
-        return $this->is_read;
+    public function getIsRead() {
+        return $this->isRead;
     }
     
     public function getCreationDate() {
         return $this->creationDate;
     }
     
-    public function getUsername() {
-        return $this->username;
-    }  
+    public function getSenderUsername() {
+        return $this->senderUserName;
+    } 
     
+    public function getRecipientUsername() {
+        return $this->recipientUserName;
+    }
+    
+      
     
     static public function loadMessageById(mysqli $connection, $id) {
 
-        $sql = "SELECT * FROM Messages WHERE id=$id";
+        $sql = "SELECT m.*, urecipient.username as recipientName, usender.username as senderName
+                FROM Messages as m
+                JOIN Users as urecipient ON m.recipientUserId = urecipient.id
+                JOIN Users as usender ON m.senderUserId = usender.id
+                WHERE m.id=$id";
 
         $result = $connection->query($sql);
 
@@ -89,8 +101,10 @@ class Messages {
             $loadedMessages->id = $row['id'];
             $loadedMessages->senderUserId = $row['senderUserId'];
             $loadedMessages->recipientUserId = $row['recipientUserId'];
+            $loadedMessages->senderUserName = $row['senderName'];
+            $loadedMessages->recipientUserName = $row['recipientName'];
             $loadedMessages->text= $row['text'];
-            $loadedMessages->is_read= $row['is_read'];
+            $loadedMessages->isRead= $row['isRead'];
             $loadedMessages->creationDate= $row['creationDate'];
 
             return $loadedMessages;
@@ -99,28 +113,59 @@ class Messages {
         return null;
     }
     
-    /*
-    static public function loadAllCommentsByTweetId(mysqli $connection, $tweetId) {
-
-        $sql = "SELECT Comment.*, Users.username FROM Comment JOIN Users ON Comment.userId=Users.id WHERE tweetId=$tweetId";
+    
+    static public function getMessagesBySenderUserId(mysqli $connection, $senderUserId) {
+        
+        $sql = "SELECT Messages.id,recipientUserId,text,isRead,creationDate,username 
+                FROM Messages Join Users ON
+                Users.id = Messages.recipientUserId
+                where senderUserId = $senderUserId ORDER BY creationDate DESC";
+        
         $ret = [];
         $result = $connection->query($sql);
+        
 
         if ($result == true && $result->num_rows != 0) {
             foreach ($result as $row) {
-                $loadedComments = new Comment();
-                $loadedComments->id = $row['id'];
-                $loadedComments->userId = $row['userId'];
-                $loadedComments->tweetId = $row['tweetId'];
-                $loadedComments->text= $row['text'];
-                $loadedComments->creationDate= $row['creationDate'];
-                $loadedComments->username= $row['username'];
-                $ret[] = $loadedComments;
+                $loadedSenderMessages = new Messages();
+                $loadedSenderMessages->id = $row['id'];
+                $loadedSenderMessages->recipientUserId = $row['recipientUserId'];
+                $loadedSenderMessages->text= $row['text'];
+                $loadedSenderMessages->isRead= $row['isRead'];
+                $loadedSenderMessages->creationDate= $row['creationDate'];
+                $loadedSenderMessages->recipientUserName= $row['username'];
+                $ret[] = $loadedSenderMessages;
             }
         }   
         return $ret;
     }
-    */
+    
+    static public function getMessagesByRecipientUserId(mysqli $connection, $recipientUserId) {
+        
+        $sql = "SELECT Messages.id,senderUserId,username,text,isRead,creationDate 
+                FROM Messages Join Users ON
+                Users.id = Messages.senderUserId
+                where recipientUserId =$recipientUserId ORDER BY creationDate DESC";
+        
+        $ret = [];
+        $result = $connection->query($sql);
+        
+
+        if ($result == true && $result->num_rows != 0) {
+            foreach ($result as $row) {
+                $loadedRecipientMessages = new Messages();
+                $loadedRecipientMessages->id = $row['id'];
+                $loadedRecipientMessages->senderUserId = $row['senderUserId'];
+                $loadedRecipientMessages->text= $row['text'];
+                $loadedRecipientMessages->isRead= $row['isRead'];
+                $loadedRecipientMessages->creationDate= $row['creationDate'];
+                $loadedRecipientMessages->senderUserName= $row['username'];
+                $ret[] = $loadedRecipientMessages;
+            }
+        }   
+        return $ret;
+    }
+    
     
     /*
       Saving new comment to DB
@@ -129,8 +174,9 @@ class Messages {
     public function saveToDB(mysqli $connection) {
         if ($this->id == -1) {
 
-            $sql = "INSERT INTO Messages (senderUserId, recipientUserId, is_read, text, creationDate)
-                  VALUES ('$this->senderUserId','$this->recipientUserId', '$this->is_read', '$this->text', '$this->creationDate')";
+            $sql = "INSERT INTO Messages (senderUserId, recipientUserId, isRead, text, creationDate)
+                  VALUES ('$this->senderUserId','$this->recipientUserId', $this->isRead, '$this->text', '$this->creationDate')";
+            
             $result = $connection->query($sql);
 
             if ($result == true) {
@@ -138,8 +184,8 @@ class Messages {
                 return true;
             } 
         } else {
-            $sql = "UPDATE Comment SET text='$this->text',
-                    creationDate='$this->creationDate' WHERE id=$this->id";
+            $sql = "UPDATE Messages SET isRead = 1
+                    WHERE id=$this->id";
             $result = $connection->query($sql);
             if ($result == true) {
                 return true;
@@ -148,3 +194,4 @@ class Messages {
         return false;
     }
 }
+

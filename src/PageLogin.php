@@ -9,12 +9,14 @@ session_start();
         <title>Login Page</title>
     </head>
     <body>
-        <a href="PageLogin.php"><img src ="ptak.jpg" height="60" width="60" title="Twitter"></a>Twitter v.1.0 by Monika Serafinska<br><br>
-        
-
 <?php
+        //<a href="PageLogin.php"><img src ="ptak.jpg" height="60" width="60" title="Twitter"></a><font size="2">Twitter v.1.0 by Monika Serafinska</font><br><br>
+     
 require_once 'connection.php';
 require_once 'User.php';
+require_once 'misc.php';
+
+printHeaderNotLoggedUser('Login page');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['email']) && isset($_POST['pass'])) {
@@ -28,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['userId'] = $id; 
                 header('location: index.php');              
             } else {
-                echo '<span style="color:red">Invalid email or password.</span>';                
+                echo '<span style="color:red">Invalid email or password.</span><br><br>';                
             }
         }
         
@@ -40,7 +42,7 @@ $conn = null;
 ?>
 
 
-    <h1>Strona logowania:</h1>
+    
     <div>
         <form method="post" action="PageLogin.php">
             <label>Email:</label><br>
@@ -51,7 +53,7 @@ $conn = null;
         </form>
     </div>
 
-        Jezeli jestes nowym uzytkownikiem, zapraszamy do <a href="PageRegistration.php">rejestracji.</a>
+        If you are a new user you have to register first on <a href="PageRegistration.php">Registration page</a>
 
 
     </body>

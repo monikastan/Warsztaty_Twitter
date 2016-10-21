@@ -61,7 +61,6 @@ class User {
      */
     public function saveToDB(mysqli $connection) {
         if ($this->id == -1) {
-
             $sql = "INSERT INTO Users(username, email, hashed_password)
                   VALUES ('$this->username', '$this->email', '$this->hashedPassword')";
             $result = $connection->query($sql);
@@ -166,7 +165,8 @@ class User {
         }
         return true;
     }
-
+    
+    
 }
     
 //CRUD - create, read, update, delete
