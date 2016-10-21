@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Czas wygenerowania: 13 Paź 2016, 21:56
--- Wersja serwera: 5.5.50-0ubuntu0.14.04.1
--- Wersja PHP: 5.5.9-1ubuntu4.19
+-- Generation Time: Oct 21, 2016 at 08:01 PM
+-- Server version: 5.5.50-0ubuntu0.14.04.1
+-- PHP Version: 5.5.9-1ubuntu4.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,13 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Baza danych: `twitter_db`
+-- Database: `twitter_db`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `Comment`
+-- Table structure for table `Comment`
 --
 
 CREATE TABLE IF NOT EXISTS `Comment` (
@@ -35,10 +35,10 @@ CREATE TABLE IF NOT EXISTS `Comment` (
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
   KEY `tweetId` (`tweetId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=41 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=60 ;
 
 --
--- Zrzut danych tabeli `Comment`
+-- Dumping data for table `Comment`
 --
 
 INSERT INTO `Comment` (`id`, `text`, `creationDate`, `userId`, `tweetId`) VALUES
@@ -68,12 +68,31 @@ INSERT INTO `Comment` (`id`, `text`, `creationDate`, `userId`, `tweetId`) VALUES
 (28, 'Insert your comment', '2016-10-12 00:12:56', 22, 28),
 (29, 'to jest kmentarz do tweeta Ali :)', '2016-10-12 17:38:42', 36, 26),
 (30, 'Ala, niestety nie zgadzam siÄ™ z TobÄ… ;)', '2016-10-12 22:51:29', 36, 30),
-(40, 'bla', '2016-10-12 23:55:38', 36, 2);
+(40, 'bla', '2016-10-12 23:55:38', 36, 2),
+(41, 'testowy komentarz', '2016-10-17 15:47:41', 37, 33),
+(42, 'no comments\r\n', '2016-10-18 15:34:02', 37, 34),
+(43, 'Insert your commenthvhjdkvdlsbkjlvbdj', '2016-10-18 15:37:50', 37, 33),
+(44, 'Insert your commentfhjsdjlsajdjla', '2016-10-18 15:37:59', 37, 33),
+(45, 'Insert your commentfhjsdjlsajdjla', '2016-10-18 15:42:56', 37, 33),
+(46, 'bhskhas', '2016-10-18 15:43:06', 37, 33),
+(47, 'fjkdhdkas', '2016-10-18 15:43:11', 37, 33),
+(48, 'Insert your comment', '2016-10-18 22:17:56', 29, 34),
+(49, 'Insert your comment', '2016-10-21 17:00:41', 45, 33),
+(50, 'Insert your commentbjsbdsjbjsbjcsd', '2016-10-21 17:00:51', 45, 33),
+(51, 'cbhjasvcbnx nxbhcvdsjhghcfgsjhdddddddddddddddddddddddBLJLLLLLLLLXNDCCCCCCCCCCCCCCCCCC', '2016-10-21 17:01:02', 45, 33),
+(52, 'Insert your comment', '2016-10-21 19:02:39', 45, 35),
+(53, 'Insert your comment', '2016-10-21 19:02:42', 45, 35),
+(54, 'Insert your comment', '2016-10-21 19:02:44', 45, 35),
+(55, 'Insert your comment', '2016-10-21 19:02:52', 45, 35),
+(56, 'Insert your comment', '2016-10-21 19:12:52', 37, 36),
+(57, 'Insert your comment', '2016-10-21 19:12:56', 37, 36),
+(58, 'Insert your comment', '2016-10-21 19:13:29', 37, 38),
+(59, 'Insert your comment', '2016-10-21 19:13:31', 37, 38);
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `Messages`
+-- Table structure for table `Messages`
 --
 
 CREATE TABLE IF NOT EXISTS `Messages` (
@@ -81,27 +100,53 @@ CREATE TABLE IF NOT EXISTS `Messages` (
   `senderUserId` int(11) NOT NULL,
   `recipientUserId` int(11) NOT NULL,
   `text` varchar(255) COLLATE utf8_polish_ci DEFAULT NULL,
-  `is_read` bit(1) NOT NULL DEFAULT b'0',
+  `isRead` bit(1) NOT NULL DEFAULT b'0',
   `creationDate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `senderUserId` (`senderUserId`),
   KEY `recipientUserId` (`recipientUserId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=34 ;
 
 --
--- Zrzut danych tabeli `Messages`
+-- Dumping data for table `Messages`
 --
 
-INSERT INTO `Messages` (`id`, `senderUserId`, `recipientUserId`, `text`, `is_read`, `creationDate`) VALUES
-(1, 36, 36, 'message', b'1', '2016-10-12 23:49:35'),
-(2, 36, 36, 'drugi message', b'1', '2016-10-12 23:50:40'),
-(3, 36, 36, 'trzeci', b'1', '2016-10-12 23:51:01'),
-(4, 36, 12, 'czwarty', b'1', '2016-10-12 23:52:39');
+INSERT INTO `Messages` (`id`, `senderUserId`, `recipientUserId`, `text`, `isRead`, `creationDate`) VALUES
+(4, 36, 12, 'czwarty', b'0', '2016-10-12 23:52:39'),
+(5, 29, 37, 'wiadomosc testowa', b'0', '2016-10-18 19:02:39'),
+(6, 29, 37, 'Insert your message', b'0', '2016-10-18 19:03:28'),
+(7, 29, 37, 'Insert your message123', b'0', '2016-10-18 19:03:33'),
+(8, 29, 37, 'Insert your message32dsadsajhdjksah', b'1', '2016-10-18 19:03:38'),
+(9, 29, 29, 'Insert your message', b'0', '2016-10-18 22:19:18'),
+(10, 29, 29, 'Insert your message', b'0', '2016-10-18 22:19:20'),
+(11, 29, 29, 'Insert your message', b'0', '2016-10-18 22:19:20'),
+(12, 29, 22, 'Insert your message', b'0', '2016-10-18 22:19:36'),
+(13, 29, 22, 'Insert your message', b'0', '2016-10-18 22:19:41'),
+(14, 29, 22, 'Insert your message', b'0', '2016-10-18 22:19:44'),
+(15, 29, 37, 'Insert your message', b'0', '2016-10-19 18:51:48'),
+(16, 29, 37, 'Insert your message1', b'0', '2016-10-19 18:51:54'),
+(17, 29, 37, 'Insert your message2', b'1', '2016-10-19 18:51:58'),
+(18, 29, 37, 'wiadomosc testowa', b'0', '2016-10-19 19:02:16'),
+(19, 29, 37, 'wiadomosc kolejna', b'1', '2016-10-19 19:02:40'),
+(20, 36, 37, 'hjkshkcasbcjkbmxz', b'1', '2016-10-19 22:44:39'),
+(21, 36, 37, 'Insert your messagebcjsabcjlasbdjkbsjb', b'0', '2016-10-19 22:44:51'),
+(22, 42, 36, 'od marty do Boguslawa', b'0', '2016-10-20 15:52:03'),
+(23, 42, 36, 'od marty do bogusia', b'0', '2016-10-20 15:52:12'),
+(24, 36, 37, 'Hej Miska ;)', b'1', '2016-10-21 15:04:16'),
+(25, 36, 37, 'Hej Miska ;)', b'0', '2016-10-21 15:06:20'),
+(26, 36, 37, 'Hej Miska ;)', b'0', '2016-10-21 15:08:32'),
+(27, 36, 37, 'Hej Miska ;)', b'1', '2016-10-21 15:09:13'),
+(28, 45, 37, 'Insert your message', b'0', '2016-10-21 16:50:53'),
+(29, 45, 37, 'Insert your message', b'0', '2016-10-21 16:51:33'),
+(30, 45, 37, 'Insert your message', b'0', '2016-10-21 16:52:08'),
+(31, 45, 37, 'Insert your message', b'1', '2016-10-21 16:57:08'),
+(32, 45, 37, 'Insert your message', b'0', '2016-10-21 16:57:10'),
+(33, 45, 37, 'Insert your message', b'0', '2016-10-21 16:57:11');
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `Tweet`
+-- Table structure for table `Tweet`
 --
 
 CREATE TABLE IF NOT EXISTS `Tweet` (
@@ -111,10 +156,10 @@ CREATE TABLE IF NOT EXISTS `Tweet` (
   `creationDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=32 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=40 ;
 
 --
--- Zrzut danych tabeli `Tweet`
+-- Dumping data for table `Tweet`
 --
 
 INSERT INTO `Tweet` (`id`, `userId`, `text`, `creationDate`) VALUES
@@ -148,12 +193,20 @@ INSERT INTO `Tweet` (`id`, `userId`, `text`, `creationDate`) VALUES
 (28, 22, 'Insert your tweet', '2016-10-11 19:50:05'),
 (29, 22, 'Insert your tweet', '2016-10-11 20:45:41'),
 (30, 22, 'moj kolejny komentarz', '2016-10-12 17:34:11'),
-(31, 36, 'test\r\n', '2016-10-12 17:35:28');
+(31, 36, 'test\r\n', '2016-10-12 17:35:28'),
+(32, 36, 'my tweet', '2016-10-17 14:48:59'),
+(33, 37, 'my first tweet', '2016-10-17 15:00:56'),
+(34, 37, 'my second tweet', '2016-10-17 15:05:33'),
+(35, 45, 'Insert your tweet', '2016-10-21 19:02:22'),
+(36, 45, 'Insert your tweet', '2016-10-21 19:02:26'),
+(37, 37, 'Insert your tweet', '2016-10-21 19:13:21'),
+(38, 37, 'Insert your tweet', '2016-10-21 19:13:25'),
+(39, 37, 'Insert your tweet', '2016-10-21 19:14:58');
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `Users`
+-- Table structure for table `Users`
 --
 
 CREATE TABLE IF NOT EXISTS `Users` (
@@ -163,10 +216,10 @@ CREATE TABLE IF NOT EXISTS `Users` (
   `email` varchar(255) COLLATE utf8_polish_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=37 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=46 ;
 
 --
--- Zrzut danych tabeli `Users`
+-- Dumping data for table `Users`
 --
 
 INSERT INTO `Users` (`id`, `username`, `hashed_password`, `email`) VALUES
@@ -176,34 +229,40 @@ INSERT INTO `Users` (`id`, `username`, `hashed_password`, `email`) VALUES
 (19, 'Gosia', '$2y$10$FGC8deFbjFNxYyvhqPJqqu7K/CIHQrJMGRp3gqukIoih9Bg7ZZhFK', 'gosia@mail.com'),
 (21, 'Lusia', '$2y$10$i6bokOS7xPVLrqZDdsdJsecFgkNQ7fJfCUZiPLdzG7PADieEFMXce', 'nowy@mail.com'),
 (22, 'ala', '$2y$10$BbXVUj4XGqsju9w7vbvEgeCVGHDpPwekTVkcmB8YBJhPdjJbXslim', 'ala@ala.com'),
-(29, 'bartek', '$2y$10$..s6EGIUm5SxosoqpQ8I4.F6Eso7e0y6vm6TBXLFQ/dYqkL79PLSq', 'bartek@bartek.com'),
+(29, 'Bartek', '$2y$10$e8Jo1Z0dSbcYVtwL5wqPPO/uS7zUjx.UTq9xjQvKiklehCze1YnLW', 'bartek@bartek.com'),
 (30, 'franio', '$2y$10$cuXM05DsPTDeXr9ugr2y0OBImD3kvrQvkHHmSrmVkhBnjpWUEKqDq', 'franio@fff.com'),
 (32, 'basia', '$2y$10$1jH9razhcfE8EPPrMVkw4eIy6fT3fiwhuwiTbRu7RSy3.ZkomlCDi', 'basia@basia.com'),
 (33, 'magda', '$2y$10$FTZxoPAFrcTFN/OAH6EbBu5Pai6LpTQuS8fIJcbVNFSWwhDs8vNNC', 'magda@mm.com'),
 (34, 'Piotrek', '$2y$10$VIlCLXggGFz.zg1jPwKuPO5TYqtHTYUean7NkNScRLacBp5hJpPfG', 'piotr@piotr.com'),
-(35, 'Krzysiek', '$2y$10$FHt.X5x28uT96iypx/pPZeUFXQ9EcZsNN/T.UCoerVjDUx6HnAv4e', 'krzys@krzys.com'),
-(36, 'Bogulaw', '$2y$10$toY.jyppfqkYWCZ3PwHdcuHDKVgcC3blVNmmvVSnEAxG836Ioimxa', 'bogus@bogus.com');
+(35, 'Krzys', '$2y$10$FHt.X5x28uT96iypx/pPZeUFXQ9EcZsNN/T.UCoerVjDUx6HnAv4e', 'krzys@krzys.com'),
+(36, 'Bogulaw', '$2y$10$toY.jyppfqkYWCZ3PwHdcuHDKVgcC3blVNmmvVSnEAxG836Ioimxa', 'bogus@bogus.com'),
+(37, 'Misia', '$2y$10$4gJEQIqHOqwXxvI5WO5Nx.QdiLRkB4PcWOD4R8lkEfyA6vfTcC79y', 'misia@misia.com'),
+(41, 'daniel', '$2y$10$kkwOR4uv3zIHSZZ2Sxb7rubnwiJsm.qUlqmhWLCRGGYIwm5gZpqcK', 'daniel@daniel.com'),
+(42, 'marta', '$2y$10$LYcjRXbTZK4ZbxvQVrEKt.1h8lGwhTTp1ZSFsXQK2BErrXjkRxi/m', 'marta@marta.com'),
+(43, 'igor', '$2y$10$ZQhOMPwS71PcYmr3F6SYIOOpbMd6LMk9YeSwabWAvu9dNF/gKwkBG', 'igor@igor.com'),
+(44, 'kamil', '$2y$10$vsTAyu6S57F5NUKsNVZvY.WnsonA/I79bRP4y8Ohp6fZS1nOewftK', 'kamil@kami.com'),
+(45, 'Stefan', '$2y$10$aMrDzrvzr2wwZ0F4xo5VOuXMQH4TNzS1oGNmqZDpwh2XbpvYK5vLW', 'stefan@stefan.pl');
 
 --
--- Ograniczenia dla zrzutów tabel
+-- Constraints for dumped tables
 --
 
 --
--- Ograniczenia dla tabeli `Comment`
+-- Constraints for table `Comment`
 --
 ALTER TABLE `Comment`
   ADD CONSTRAINT `Comment_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`),
   ADD CONSTRAINT `Comment_ibfk_2` FOREIGN KEY (`tweetId`) REFERENCES `Tweet` (`id`) ON DELETE CASCADE;
 
 --
--- Ograniczenia dla tabeli `Messages`
+-- Constraints for table `Messages`
 --
 ALTER TABLE `Messages`
   ADD CONSTRAINT `Messages_ibfk_1` FOREIGN KEY (`senderUserId`) REFERENCES `Users` (`id`),
   ADD CONSTRAINT `Messages_ibfk_2` FOREIGN KEY (`recipientUserId`) REFERENCES `Users` (`id`) ON DELETE CASCADE;
 
 --
--- Ograniczenia dla tabeli `Tweet`
+-- Constraints for table `Tweet`
 --
 ALTER TABLE `Tweet`
   ADD CONSTRAINT `Tweet_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE CASCADE;
