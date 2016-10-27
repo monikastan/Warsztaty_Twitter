@@ -8,8 +8,8 @@
 
 <?php
 session_start();
-require_once 'connection.php';
-require_once 'User.php';
+require_once 'src/connection.php';
+require_once 'src/User.php';
 require_once 'misc.php';
 
 if (isset($_SESSION['userId'])) {
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($activeUser->saveToDB($conn) == true) {
            echo "Changes were done correctly! <br>Your user data has changed.";
-           die();
+           
         } else {
            echo "Problem when updating user data.";
         }

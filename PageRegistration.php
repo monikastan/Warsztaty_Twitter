@@ -8,8 +8,8 @@
  
 <?php
 session_start();
-require_once 'connection.php';
-require_once 'User.php';
+require_once 'src/connection.php';
+require_once 'src/User.php';
 require_once 'misc.php';
 
 printHeaderNotLoggedUser('Registration');
@@ -38,10 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
                     if($newUser->saveToDB($conn)) {
-
-                        echo "New user has been registered. <br>Your name is: ". $newUser->getUsername(). ", and your email is: ".$newUser->getEmail();
-                        echo '<br>Go to  <a href="PageLogin.php">Login page</a>';
-                        die();
+                        header('location: PageLogin.php');
                     } 
             
                 }
